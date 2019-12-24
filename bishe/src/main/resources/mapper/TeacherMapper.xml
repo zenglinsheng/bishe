@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zls.bishe.mapper.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.zls.bishe.pojo.Teacher" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="job_number" property="jobNumber" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="user_img" property="userImg" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="is_leader" property="isLeader" jdbcType="INTEGER" />
+    <result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="marital_status" property="maritalStatus" jdbcType="INTEGER" />
+    <result column="political_appearance" property="politicalAppearance" jdbcType="INTEGER" />
+    <result column="top_title" property="topTitle" jdbcType="INTEGER" />
+    <result column="current_title" property="currentTitle" jdbcType="INTEGER" />
+    <result column="working_time" property="workingTime" jdbcType="TIMESTAMP" />
+    <result column="job_status" property="jobStatus" jdbcType="INTEGER" />
+    <result column="administrative_position" property="administrativePosition" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="first_degree" property="firstDegree" jdbcType="INTEGER" />
+    <result column="highest_degree" property="highestDegree" jdbcType="INTEGER" />
+    <result column="registered_residence" property="registeredResidence" jdbcType="VARCHAR" />
+    <result column="compilation" property="compilation" jdbcType="INTEGER" />
+    <result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+    <result column="entrance_time" property="entranceTime" jdbcType="TIMESTAMP" />
+    <result column="family_address" property="familyAddress" jdbcType="VARCHAR" />
+    <result column="residential_tel" property="residentialTel" jdbcType="VARCHAR" />
+    <result column="departure_time" property="departureTime" jdbcType="TIMESTAMP" />
+    <result column="review_status" property="reviewStatus" jdbcType="INTEGER" />
+    <result column="delete_status" property="deleteStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <insert id="insertTeacherList" parameterType="java.util.List" useGeneratedKeys="false" >
+    insert into teacher
+    ( user_id,job_number,password,username,gender,birthday,age,email,current_title,administrative_position,create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.userId},
+      #{item.jobNumber},
+      #{item.password},
+      #{item.username},
+      #{item.gender},
+      #{item.birthday},
+      #{item.age},
+      #{item.email},
+      #{item.currentTitle},
+      #{item.administrativePosition},
+      #{item.createTime}
+      )
+    </foreach>
+  </insert>
+
+  <update id="deleteTeachers"  parameterType="java.util.List">
+    update teacher
+    set delete_status =
+    <foreach collection="list" item="item" index="index"
+             separator=" " open="case" close="end">
+      when user_id=#{item} then 1
+    </foreach>
+    where user_id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <update id="recoverTeachers"  parameterType="java.util.List">
+    update teacher
+    set delete_status =
+    <foreach collection="list" item="item" index="index"
+             separator=" " open="case" close="end">
+      when user_id=#{item} then 0
+    </foreach>
+    where user_id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zls.bishe.mapper.ClassesMapper" >
+  <resultMap id="BaseResultMap" type="com.zls.bishe.pojo.Classes" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="classname" property="classname" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="headmaster_id" property="headmasterId" jdbcType="VARCHAR" />
+    <result column="delete_status" property="deleteStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <update id="updateClassList"  parameterType="java.util.List">
+<!--    <foreach collection="list" item="item" index="index" open="" close=";" separator=";">-->
+<!--      update classes set num = #{item.num} where class_id = #{item.classId};-->
+<!--    </foreach>-->
+    update classes
+    set num =
+    <foreach collection="list" item="item" index="index"
+             separator=" " open="case" close="end">
+      when class_id=#{item.classId} then #{item.num}
+    </foreach>
+    where class_id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item.classId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+</mapper>

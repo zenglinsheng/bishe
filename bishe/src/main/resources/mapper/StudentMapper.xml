@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zls.bishe.mapper.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.zls.bishe.pojo.Student" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="user_img" property="userImg" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="class_name" property="className" jdbcType="VARCHAR" />
+    <result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="marital_status" property="maritalStatus" jdbcType="INTEGER" />
+    <result column="political_appearance" property="politicalAppearance" jdbcType="INTEGER" />
+    <result column="entrance_time" property="entranceTime" jdbcType="TIMESTAMP" />
+    <result column="graduation_school" property="graduationSchool" jdbcType="VARCHAR" />
+    <result column="id_number" property="idNumber" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="registered_residence" property="registeredResidence" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+    <result column="family_address" property="familyAddress" jdbcType="VARCHAR" />
+    <result column="residential_tel" property="residentialTel" jdbcType="VARCHAR" />
+    <result column="review_status" property="reviewStatus" jdbcType="INTEGER" />
+    <result column="delete_status" property="deleteStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <insert id="insertStudentList" parameterType="java.util.List" useGeneratedKeys="false" >
+    insert into student
+    ( user_id,number,password,username,gender,birthday,age,class_id,class_name,telephone,email,create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.userId},
+      #{item.number},
+      #{item.password},
+      #{item.username},
+      #{item.gender},
+      #{item.birthday},
+      #{item.age},
+      #{item.classId},
+      #{item.className},
+      #{item.telephone},
+      #{item.email},
+      #{item.createTime}
+      )
+    </foreach>
+  </insert>
+
+  <update id="deleteStudents"  parameterType="java.util.List">
+    update student
+    set delete_status =
+    <foreach collection="list" item="item" index="index"
+             separator=" " open="case" close="end">
+      when user_id=#{item} then 1
+    </foreach>
+    where user_id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <update id="recoverStudents"  parameterType="java.util.List">
+    update student
+    set delete_status =
+    <foreach collection="list" item="item" index="index"
+             separator=" " open="case" close="end">
+      when user_id=#{item} then 0
+    </foreach>
+    where user_id in
+    <foreach collection="list" index="index" item="item"
+             separator="," open="(" close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+
+</mapper>
